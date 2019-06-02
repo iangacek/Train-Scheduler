@@ -22,9 +22,10 @@ $("#add-train-button").on("click", function (event) {
 
     var createNewTrain = {
         name: trainName,
-        role: destinationName,
-        start: firstTime,
-        rate: trainFrequency
+        destination: destinationName,
+        startTime: firstTime,
+        freq: trainFrequency,
+        // minsAway: minsAway
     };
 
     database.ref().push(createNewTrain);
@@ -38,15 +39,17 @@ $("#add-train-button").on("click", function (event) {
     $("#destination-name-input").val("");
     $("#first-train-time-input").val("");
     $("#train-frequency-input").val("");
+    $("#trainName").append(newRow);
 });
 
 database.ref().on("child_added", function (childSnapshot) {
     console.log(childSnapshot.val());
 
     var trainName = childSnapshot.val().name;
-    var destinationName = childSnapshot.val().name;
-    var firstTime = childSnapshot.val().time;
-    var trainFrequency = childSnapshot.val().frequency;
+    var destinationName = childSnapshot.val().destination;
+    var firstTime = childSnapshot.val().startTime;
+    var trainFrequency = childSnapshot.val().freq;
+    var trainDist = childSnapshot.val().dist;
 
     console.log(trainName);
     console.log(destinationName);
@@ -63,8 +66,7 @@ database.ref().on("child_added", function (childSnapshot) {
         $("<td>").text(destinationName),
         $("<td>").text(firstTime),
         $("<td>").text(trainFrequency),
-        $("<td>").text(emptyStartTime),
-        $("<td>").text(trainFreq),
+        $("<td>").text(trainDist),
     );
 
     $("#trainTable").append(newRow);
